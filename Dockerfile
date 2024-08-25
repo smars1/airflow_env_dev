@@ -28,4 +28,6 @@ ENV AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=sqlite:////opt/airflow/airflow.db
 ENV AIRFLOW__CORE__FERNET_KEY=${FERNET_KEY}
 ENV AIRFLOW__DAG_DEFAULT_VIEW=graph
 
-CMD ["airflow", "webserver"]
+# Inicializar la base de datos y luego iniciar el webserver y scheduler
+CMD ["bash", "-c", "airflow db init && airflow webserver & airflow scheduler"]
+
