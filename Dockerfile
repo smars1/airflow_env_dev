@@ -26,7 +26,7 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # Usar el script como punto de entrada
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["./entrypoint.sh"]
 
 # # Inicializar la base de datos y luego iniciar el webserver y scheduler
 # CMD ["bash", "-c", "airflow db init && airflow webserver"]
