@@ -23,5 +23,12 @@ COPY requirements.txt /requirements.txt
 RUN pip install --upgrade pip
 RUN pip install -r /requirements.txt
 
-# Comando para iniciar el servidor web de Airflow
+# Configurar las variables de entorno necesarias
+ENV AIRFLOW__CORE__EXECUTOR=LocalExecutor
+ENV AIRFLOW__CORE__LOAD_EXAMPLES=False
+ENV AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/airflow
+ENV AIRFLOW__CORE__FERNET_KEY=${FERNET_KEY}
+ENV AIRFLOW__DAG_DEFAULT_VIEW=graph
+
+# Comando para iniciar Airflow
 CMD ["airflow", "webserver"]
