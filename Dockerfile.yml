@@ -22,3 +22,6 @@ COPY requirements.txt /requirements.txt
 # Instalar las dependencias de Python
 RUN pip install --upgrade pip
 RUN pip install -r /requirements.txt
+
+# Comando para iniciar el servidor web de Airflow
+CMD ["airflow", "webserver"]
