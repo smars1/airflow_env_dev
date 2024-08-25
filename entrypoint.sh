@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Inicializar la base de datos de Airflow
+airflow db init
+
 # Crear el usuario administrador
 airflow users create \
     --username "$AIRFLOW_ADMIN_USER" \
@@ -9,4 +12,5 @@ airflow users create \
     --email "$AIRFLOW_ADMIN_EMAIL" \
     --password "$AIRFLOW_ADMIN_PASSWORD"
 
-
+# Iniciar el webserver de Airflow
+exec airflow webserver
