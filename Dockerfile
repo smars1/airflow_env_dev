@@ -21,7 +21,13 @@ COPY requirements.txt /requirements.txt
 RUN pip install --upgrade pip
 RUN pip install -r /requirements.txt
 
+# Copiar el script de inicialización
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-# Inicializar la base de datos y luego iniciar el webserver y scheduler
-CMD ["bash", "-c", "airflow db init && airflow webserver"]
+# Usar el script como punto de entrada
+ENTRYPOINT ["/entrypoint.sh"]
+
+# # Inicializar la base de datos y luego iniciar el webserver y scheduler
+# CMD ["bash", "-c", "airflow db init && airflow webserver"]
 
