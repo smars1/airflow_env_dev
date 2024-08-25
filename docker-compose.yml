@@ -1,0 +1,70 @@
+version: "3.9"
+x-airflow-environment: &airflow-environment
+  AIRFLOW__CORE__EXECUTOR: LocalExecutor
+  AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+  AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/airflow
+  AIRFLOW__CORE__FERNET_KEY: ${FERNET_KEY}
+  AIRFLOW__DAG_DEFAULT_VIEW: graph
+  
+  AIRFLOW__SMTP__SMTP_HOST: smtp.gmail.com
+  AIRFLOW__SMTP__SMTP_STARTTLS: 'True'
+  AIRFLOW__SMTP__SMTP_SSL: 'False'
+  AIRFLOW__SMTP__SMTP_USER: ${SMTP_USER}
+  AIRFLOW__SMTP__SMTP_PASSWORD: ${SMTP_PASSWORD}
+  AIRFLOW__SMTP__SMTP_PORT: '587'
+  AIRFLOW__SMTP__SMTP_MAIL_FROM: ${SMTP_MAIL_FROM}
+
+services:
+  postgres:
+    image: postgres:11.5
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: airflow
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+
+  init:
+    build: .
+    environment:
+      <<: *airflow-environment
+    depends_on:
+      - postgres
+    entrypoint: /bin/sh
+    command: -c "
+      airflow db init &&
+      (airflow users list | grep 'No data found' && airflow users create --role Admin --username ${AIRFLOW_ADMIN_USER} --password ${AIRFLOW_ADMIN_PASSWORD} -e ${AIRFLOW_ADMIN_EMAIL} -f airflow -l airflow || echo 'User already exists') &&
+      exit 0"
+    restart: on-failure
+
+  db-upgrade:
+    build: .
+    environment:
+      <<: *airflow-environment
+    depends_on:
+      - postgres
+    entrypoint: /bin/sh
+    command: -c "airflow db upgrade"
+    restart: "no"
+
+  webserver:
+    build: .
+    ports:
+      - 8080:8080
+    environment:
+      <<: *airflow-environment
+    depends_on:
+      - db-upgrade
+    entrypoint: /bin/sh
+    command: -c "pip3 install pandas --user && airflow webserver"
+    restart: always
+
+  scheduler:
+    build: .
+    environment:
+      <<: *airflow-environment
+    depends_on:
+      - db-upgrade
+    entrypoint: /bin/sh
+    command: -c "airflow scheduler"
+    restart: always
