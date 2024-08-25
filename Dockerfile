@@ -9,6 +9,10 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Copiar y configurar permisos para el script de inicialización
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 USER airflow
 
 # Clonar el repositorio de DAGs en un directorio temporal
@@ -20,11 +24,6 @@ COPY requirements.txt /requirements.txt
 
 RUN pip install --upgrade pip
 RUN pip install -r /requirements.txt
-
-# Copiar el script de inicialización
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
 
 
 # # Inicializar la base de datos y luego iniciar el webserver y scheduler
