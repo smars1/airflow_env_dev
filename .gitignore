@@ -1,2 +1,2 @@
 .env
-docker_compose.yml
+**/docker-compose.yml
