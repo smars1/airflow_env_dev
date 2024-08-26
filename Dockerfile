@@ -15,6 +15,9 @@ RUN chmod +x /entrypoint.sh
 
 USER airflow
 
+# Crear las carpetas 'plugins' y 'logs'
+RUN mkdir -p /opt/airflow/plugins /opt/airflow/logs
+
 # Clonar el repositorio de DAGs en un directorio temporal
 RUN git clone https://github.com/smars1/Airflow_dags_testing.git /tmp/repo && \
     mv /tmp/repo/dags/* /opt/airflow/dags/ && \
