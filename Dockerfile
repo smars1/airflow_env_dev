@@ -28,6 +28,8 @@ COPY variables_test.json /opt/airflow/variables_test.json
 RUN pip install --upgrade pip
 RUN pip install -r /requirements.txt
 
+# Instalar pandas directamente en el Dockerfile para asegurar la compatibilidad
+RUN pip install pandas
 
 # # Inicializar la base de datos y luego iniciar el webserver y scheduler
 CMD ["bash", "-c", "airflow db init && airflow webserver"]
