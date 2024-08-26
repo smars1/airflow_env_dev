@@ -21,6 +21,9 @@ RUN git clone https://github.com/smars1/Airflow_dags_testing.git /tmp/repo && \
     rm -rf /tmp/repo
 
 COPY requirements.txt /requirements.txt
+# variables_test.json  debe estar en el mismo directorio que tu Dockerfile
+COPY variables_test.json /opt/airflow/variables_test.json
+
 
 RUN pip install --upgrade pip
 RUN pip install -r /requirements.txt
