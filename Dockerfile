@@ -29,7 +29,11 @@ COPY variables_test.json /opt/airflow/variables_test.json
 
 
 RUN pip install --upgrade pip
-RUN pip install -r /requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
+
+# copiar el resto del código fuente: se aprovecha el cache de docker para no volver instalar los paquetes con pip
+# Solo usar si no se modifica el requirements
+COPY . .
 
 # Instalar pandas directamente en el Dockerfile para asegurar la compatibilidad
 RUN pip install pandas
