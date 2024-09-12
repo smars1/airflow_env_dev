@@ -1,4 +1,6 @@
-FROM apache/airflow:2.6.2
+FROM apache/airflow:2.9.0-python3.9
+RUN python --version
+
 
 USER root
 
