@@ -36,7 +36,8 @@ RUN pip install --no-cache-dir -r /requirements.txt
 COPY . .
 
 # Instalar pandas directamente en el Dockerfile para asegurar la compatibilidad
-RUN pip install pandas
+# se agrega al requirements
+#RUN pip install pandas
 
 # # Inicializar la base de datos y luego iniciar el webserver y scheduler
 CMD ["bash", "-c", "airflow db init && airflow webserver"]
