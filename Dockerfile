@@ -17,7 +17,7 @@ RUN chmod +x /entrypoint.sh
 
 USER airflow
 
-# Crear las carpetas 'plugins' y 'logs' y asegurar permisos
+# Crear las carpetas 'plugins' y 'logs'
 RUN mkdir -p /opt/airflow/plugins /opt/airflow/logs && \
     chown -R airflow /opt/airflow/logs
 
@@ -39,8 +39,7 @@ RUN pip install --no-cache-dir -r /requirements.txt
 COPY . .
 
 # Instalar pandas directamente en el Dockerfile para asegurar la compatibilidad
-# se agrega al requirements
-#RUN pip install pandas
+RUN pip install pandas
 
 # # Inicializar la base de datos y luego iniciar el webserver y scheduler
 CMD ["bash", "-c", "airflow db init && airflow webserver"]
