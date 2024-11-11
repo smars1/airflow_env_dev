@@ -12,5 +12,10 @@ airflow users create \
     --email "$AIRFLOW_ADMIN_EMAIL" \
     --password "$AIRFLOW_ADMIN_PASSWORD"
 
+# Iniciar el webserver en segundo plano
+airflow webserver &
+
+# Iniciar el scheduler en primer plano
+exec airflow scheduler
 # Iniciar el webserver de Airflow
-exec airflow webserver
+#exec airflow webserver
